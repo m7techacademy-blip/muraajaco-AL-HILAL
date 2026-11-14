@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html lang="so">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🎮 Operating System Quiz</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --neon-blue: #00f0ff;
+    --neon-pink: #ff00e5;
+    --neon-green: #00ff88;
+    --neon-red: #ff2d55;
+    --neon-yellow: #ffd60a;
+    --bg-dark: #05060f;
+    --bg-panel: rgba(15, 20, 40, 0.85);
+  }
+
+  body {
+    min-height: 100vh;
+    background: var(--bg-dark);
+    font-family: 'Rajdhani', sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 15px;
+    overflow: hidden;
+    position: relative;
+    color: #fff;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0, 240, 255, 0.08) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0, 240, 255, 0.08) 1px, transparent 1px);
+    background-size: 45px 45px;
+    animation: gridMove 20s linear infinite;
+    z-index: 0;
+  }
+
+  @keyframes gridMove {
+    0% { background-position: 0 0; }
+    100% { background-position: 45px 45px; }
+  }
+
+  .orb {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(90px);
+    opacity: 0.4;
+    z-index: 0;
+    animation: float 8s ease-in-out infinite;
+  }
+  .orb1 { width: 350px; height: 350px; background: var(--neon-pink); top: -100px; left: -100px; }
+  .orb2 { width: 300px; height: 300px; background: var(--neon-blue); bottom: -80px; right: -80px; animation-delay: -3s; }
+  .orb3 { width: 250px; height: 250px; background: var(--neon-green); top: 40%; left: 60%; animation-delay: -5s; opacity: 0.25; }
+
+  @keyframes float {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(40px, -40px) scale(1.15); }
+  }
+
+  .game-panel {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 720px;
+    background: var(--bg-panel);
+    border: 2px solid rgba(0, 240, 255, 0.35);
+    border-radius: 20px;
+    padding: 35px 28px;
+    box-shadow:
+      0 0 40px rgba(0, 240, 255, 0.25),
+      inset 0 0 40px rgba(0, 240, 255, 0.05);
+    backdrop-filter: blur(10px);
+    animation: panelIn 0.7s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+  }
+
+  @keyframes panelIn {
+    from { opacity: 0; transform: scale(0.85) translateY(40px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+  }
+
+  .logo { text-align: center; margin-bottom: 5px; }
+
+  .logo h1 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(22px, 5.5vw, 34px);
+    font-weight: 900;
+    background: linear-gradient(90deg, var(--neon-blue), var(--neon-pink), var(--neon-green));
+    background-size: 300% 100%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: gradientShift 4s ease infinite;
+    letter-spacing: 2px;
+  }
+
+  @keyframes gradientShift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+
+  .logo .tagline {
+    text-align: center;
+    color: var(--neon-blue);
+    font-size: 13px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin-bottom: 30px;
+    opacity: 0.8;
+  }
+
+  .field-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 12px;
+    letter-spacing: 2px;
+    color: var(--neon-blue);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .field-label::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    background: var(--neon-pink);
+    border-radius: 50%;
+    box-shadow: 0 0 10px var(--neon-pink);
+  }
+
+  .input-field {
+    width: 100%;
+    padding: 15px 18px;
+    background: rgba(0, 240, 255, 0.05);
+    border: 2px solid rgba(0, 240, 255, 0.3);
+    border-radius: 10px;
+    color: #fff;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 17px;
+    font-weight: 600;
+    outline: none;
+    transition: all 0.3s;
+    letter-spacing: 1px;
+  }
+
+  .input-field::placeholder { color: rgba(255,255,255,0.3); }
+
+  .input-field:focus {
+    border-color: var(--neon-blue);
+    box-shadow: 0 0 20px rgba(0, 240, 255, 0.4);
+    background: rgba(0, 240, 255, 0.1);
+  }
+
+  .circle-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+
+  .circle-card {
+    padding: 18px 8px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 2px solid rgba(0, 240, 255, 0.2);
+    border-radius: 12px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.25s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .circle-card .num {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 26px;
+    font-weight: 900;
+    color: var(--neon-blue);
+    display: block;
+    transition: all 0.25s;
+  }
+
+  .circle-card .lbl {
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+    margin-top: 4px;
+  }
+
+  .circle-card:hover {
+    border-color: var(--neon-pink);
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(255, 0, 229, 0.3);
+  }
+
+  .circle-card.active {
+    border-color: var(--neon-blue);
+    background: rgba(0, 240, 255, 0.12);
+    box-shadow: 0 0 25px rgba(0, 240, 255, 0.5), inset 0 0 20px rgba(0,240,255,0.1);
+  }
+
+  .circle-card.active .num { color: #fff; text-shadow: 0 0 15px var(--neon-blue); }
+
+  .circle-card.active::after {
+    content: '✓';
+    position: absolute;
+    top: 4px;
+    right: 6px;
+    color: var(--neon-green);
+    font-weight: 700;
+    font-size: 14px;
+  }
+
+  .btn-start {
+    width: 100%;
+    padding: 18px;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #05060f;
+    background: linear-gradient(90deg, var(--neon-blue), var(--neon-green));
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.25s;
+    box-shadow: 0 0 30px rgba(0, 240, 255, 0.5);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-start::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 100%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
+    transition: left 0.6s;
+  }
+
+  .btn-start:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 0 50px rgba(0, 240, 255, 0.8); }
+  .btn-start:hover::before { left: 100%; }
+  .btn-start:active { transform: scale(0.98); }
+
+  .hud {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    gap: 12px;
+  }
+
+  .player-tag {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 13px;
+    color: var(--neon-blue);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--neon-pink), var(--neon-blue));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    font-size: 16px;
+    color: #fff;
+    box-shadow: 0 0 15px rgba(0, 240, 255, 0.6);
+    font-family: 'Orbitron', sans-serif;
+  }
+
+  .hud-stats { display: flex; gap: 10px; }
+
+  .stat-box {
+    background: rgba(0, 240, 255, 0.08);
+    border: 1px solid rgba(0, 240, 255, 0.3);
+    border-radius: 8px;
+    padding: 6px 14px;
+    text-align: center;
+    min-width: 65px;
+  }
+
+  .stat-box .val {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 18px;
+    font-weight: 900;
+    color: var(--neon-green);
+    display: block;
+    line-height: 1.2;
+  }
+
+  .stat-box.score .val { color: var(--neon-yellow); }
+  .stat-box .key {
+    font-size: 9px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+  }
+
+  .progress-wrap {
+    height: 10px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 24px;
+    border: 1px solid rgba(0, 240, 255, 0.2);
+  }
+
+  .progress-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--neon-blue), var(--neon-green), var(--neon-yellow));
+    border-radius: 10px;
+    transition: width 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+    box-shadow: 0 0 15px rgba(0, 240, 255, 0.7);
+  }
+
+  .question-box {
+    position: relative;
+    padding: 24px 22px;
+    background: linear-gradient(135deg, rgba(0,240,255,0.1), rgba(255,0,229,0.08));
+    border: 2px solid rgba(0, 240, 255, 0.3);
+    border-radius: 14px;
+    margin-bottom: 22px;
+    animation: qIn 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+    min-height: 110px;
+    display: flex;
+    align-items: center;
+  }
+
+  @keyframes qIn {
+    from { opacity: 0; transform: translateX(-60px) rotateY(30deg); }
+    to { opacity: 1; transform: translateX(0) rotateY(0); }
+  }
+
+  .question-box::before {
+    content: '❓';
+    position: absolute;
+    top: -14px;
+    left: 18px;
+    background: var(--bg-dark);
+    padding: 0 8px;
+    font-size: 18px;
+    filter: drop-shadow(0 0 8px var(--neon-blue));
+  }
+
+  .question-text {
+    font-size: clamp(16px, 3.2vw, 19px);
+    font-weight: 700;
+    line-height: 1.5;
+    color: #fff;
+  }
+
+  .options { display: flex; flex-direction: column; gap: 12px; }
+
+  .opt {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 18px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 2px solid rgba(0, 240, 255, 0.2);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: #e0e0f0;
+    text-align: left;
+    width: 100%;
+    animation: optIn 0.4s backwards;
+  }
+
+  .opt:nth-child(1) { animation-delay: 0.05s; }
+  .opt:nth-child(2) { animation-delay: 0.1s; }
+  .opt:nth-child(3) { animation-delay: 0.15s; }
+  .opt:nth-child(4) { animation-delay: 0.2s; }
+
+  @keyframes optIn {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .opt .key-badge {
+    width: 34px;
+    height: 34px;
+    flex-shrink: 0;
+    border-radius: 8px;
+    background: rgba(0, 240, 255, 0.15);
+    border: 1px solid rgba(0, 240, 255, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 700;
+    color: var(--neon-blue);
+    font-size: 15px;
+    transition: all 0.2s;
+  }
+
+  .opt:hover:not(:disabled) {
+    border-color: var(--neon-blue);
+    background: rgba(0, 240, 255, 0.1);
+    transform: translateX(8px);
+    box-shadow: -4px 0 20px rgba(0, 240, 255, 0.4);
+  }
+
+  .opt:hover:not(:disabled) .key-badge {
+    background: var(--neon-blue);
+    color: var(--bg-dark);
+  }
+
+  .opt.correct {
+    border-color: var(--neon-green);
+    background: rgba(0, 255, 136, 0.15);
+    box-shadow: 0 0 30px rgba(0, 255, 136, 0.5);
+    animation: correctPop 0.5s;
+  }
+  .opt.correct .key-badge { background: var(--neon-green); color: var(--bg-dark); }
+
+  .opt.wrong {
+    border-color: var(--neon-red);
+    background: rgba(255, 45, 85, 0.15);
+    box-shadow: 0 0 30px rgba(255, 45, 85, 0.5);
+    animation: wrongShake 0.45s;
+  }
+  .opt.wrong .key-badge { background: var(--neon-red); color: #fff; }
+
+  .opt:disabled { cursor: not-allowed; }
+
+  @keyframes correctPop {
+    0% { transform: scale(1); }
+    40% { transform: scale(1.04); }
+    100% { transform: scale(1); }
+  }
+
+  @keyframes wrongShake {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-10px); }
+    40% { transform: translateX(10px); }
+    60% { transform: translateX(-8px); }
+    80% { transform: translateX(8px); }
+  }
+
+  .feedback-pop {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'Orbitron', sans-serif;
+    font-size: 42px;
+    font-weight: 900;
+    pointer-events: none;
+    z-index: 100;
+    animation: popFloat 1s ease-out forwards;
+    text-shadow: 0 0 30px currentColor;
+  }
+
+  @keyframes popFloat {
+    0% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+    30% { opacity: 1; transform: translate(-50%, -60%) scale(1.2); }
+    100% { opacity: 0; transform: translate(-50%, -110%) scale(1); }
+  }
+
+  .result-screen { text-align: center; animation: panelIn 0.6s; }
+
+  .result-badge {
+    font-size: 70px;
+    margin-bottom: 8px;
+    display: inline-block;
+    animation: badgeFloat 2s ease-in-out infinite;
+    filter: drop-shadow(0 0 30px var(--neon-yellow));
+  }
+
+  @keyframes badgeFloat {
+    0%, 100% { transform: translateY(0) rotate(-5deg); }
+    50% { transform: translateY(-15px) rotate(5deg); }
+  }
+
+  .result-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 22px;
+    font-weight: 900;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    background: linear-gradient(90deg, var(--neon-blue), var(--neon-pink));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin: 18px 0 22px;
+  }
+
+  .stat-card {
+    padding: 20px 12px;
+    border-radius: 14px;
+    position: relative;
+    overflow: hidden;
+    animation: statIn 0.6s backwards;
+  }
+
+  .stat-card:nth-child(1) { animation-delay: 0.2s; }
+  .stat-card:nth-child(2) { animation-delay: 0.4s; }
+
+  @keyframes statIn {
+    from { opacity: 0; transform: scale(0.7) translateY(20px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+  }
+
+  .stat-card.correct-card {
+    background: linear-gradient(135deg, rgba(0,255,136,0.18), rgba(0,255,136,0.05));
+    border: 2px solid var(--neon-green);
+    box-shadow: 0 0 25px rgba(0, 255, 136, 0.35), inset 0 0 20px rgba(0,255,136,0.08);
+  }
+
+  .stat-card.wrong-card {
+    background: linear-gradient(135deg, rgba(255,45,85,0.18), rgba(255,45,85,0.05));
+    border: 2px solid var(--neon-red);
+    box-shadow: 0 0 25px rgba(255, 45, 85, 0.35), inset 0 0 20px rgba(255,45,85,0.08);
+  }
+
+  .stat-icon {
+    font-size: 30px;
+    margin-bottom: 6px;
+    display: block;
+  }
+
+  .stat-number {
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(36px, 9vw, 48px);
+    font-weight: 900;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .correct-card .stat-number {
+    color: var(--neon-green);
+    text-shadow: 0 0 25px rgba(0, 255, 136, 0.8);
+  }
+
+  .wrong-card .stat-number {
+    color: var(--neon-red);
+    text-shadow: 0 0 25px rgba(255, 45, 85, 0.8);
+  }
+
+  .stat-label {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.85);
+  }
+
+  .score-display {
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(42px, 10vw, 58px);
+    font-weight: 900;
+    margin: 5px 0;
+    color: var(--neon-yellow);
+    text-shadow: 0 0 40px rgba(255, 214, 10, 0.7);
+    animation: scoreGlow 1.5s ease-in-out infinite alternate;
+  }
+
+  @keyframes scoreGlow {
+    from { text-shadow: 0 0 30px rgba(255, 214, 10, 0.5); }
+    to { text-shadow: 0 0 60px rgba(255, 214, 10, 1); }
+  }
+
+  .score-label {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 12px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 5px;
+  }
+
+  .result-msg {
+    color: rgba(255,255,255,0.75);
+    font-size: 16px;
+    margin: 18px 0 8px;
+    font-weight: 500;
+  }
+
+  .stars {
+    font-size: 30px;
+    letter-spacing: 8px;
+    margin: 12px 0 25px;
+    filter: drop-shadow(0 0 10px var(--neon-yellow));
+  }
+
+  .stars span { display: inline-block; animation: starIn 0.5s backwards; }
+  .stars span:nth-child(1) { animation-delay: 0.6s; }
+  .stars span:nth-child(2) { animation-delay: 0.8s; }
+  .stars span:nth-child(3) { animation-delay: 1s; }
+
+  @keyframes starIn {
+    from { opacity: 0; transform: scale(0) rotate(-180deg); }
+    to { opacity: 1; transform: scale(1) rotate(0); }
+  }
+
+  .hidden { display: none !important; }
+
+  @media (max-width: 480px) {
+    .game-panel { padding: 25px 18px; }
+    .circle-grid { grid-template-columns: repeat(2, 1fr); }
+    .hud { flex-wrap: wrap; }
+    .stat-box { min-width: 55px; padding: 5px 10px; }
+    .stat-box .val { font-size: 15px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+<div class="orb orb3"></div>
+
+<div class="game-panel">
+
+  <!-- ============ SETUP ============ -->
+  <div id="setupScreen">
+    <div class="logo">
+      <h1>OS QUIZ GAME</h1>
+      <div class="tagline">◈ Operating System ◈</div>
+    </div>
+
+    <div class="field-label">Magacaaga</div>
+    <input type="text" id="nameInput" class="input-field" placeholder="Geli magacaaga..." maxlength="20" style="margin-bottom:26px;">
+
+    <div class="field-label">Dooro Circle-ka</div>
+    <div class="circle-grid" id="circleGrid">
+      <div class="circle-card" data-count="5">
+        <span class="num">5</span>
+        <div class="lbl">Su'aalo</div>
+      </div>
+      <div class="circle-card active" data-count="10">
+        <span class="num">10</span>
+        <div class="lbl">Su'aalo</div>
+      </div>
+      <div class="circle-card" data-count="15">
+        <span class="num">15</span>
+        <div class="lbl">Su'aalo</div>
+      </div>
+      <div class="circle-card" data-count="20">
+        <span class="num">20</span>
+        <div class="lbl">Su'aalo</div>
+      </div>
+    </div>
+
+    <button class="btn-start" onclick="startGame()">▶ BILOW CYAARTA</button>
+  </div>
+
+  <!-- ============ QUIZ ============ -->
+  <div id="quizScreen" class="hidden">
+    <div class="hud">
+      <div class="player-tag">
+        <div class="avatar" id="avatar">?</div>
+        <span id="playerName">Player</span>
+      </div>
+      <div class="hud-stats">
+        <div class="stat-box score">
+          <span class="val" id="scoreVal">0</span>
+          <span class="key">Score</span>
+        </div>
+        <div class="stat-box">
+          <span class="val" id="qCountVal">1/10</span>
+          <span class="key">Su'aal</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="progress-wrap">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+
+    <div class="question-box">
+      <div class="question-text" id="questionText"></div>
+    </div>
+
+    <div class="options" id="optionsContainer"></div>
+  </div>
+
+  <!-- ============ RESULT ============ -->
+  <div id="resultScreen" class="hidden result-screen">
+    <div class="result-badge" id="resultBadge">🏆</div>
+    <div class="result-title" id="resultTitle">CYAAR DHAMMAAD</div>
+
+    <div class="stats-grid">
+      <div class="stat-card correct-card">
+        <span class="stat-icon">✅</span>
+        <div class="stat-number" id="correctCount">0</div>
+        <div class="stat-label">Intaani waad saxday</div>
+      </div>
+      <div class="stat-card wrong-card">
+        <span class="stat-icon">❌</span>
+        <div class="stat-number" id="wrongCount">0</div>
+        <div class="stat-label">Intaani waad qaladay</div>
+      </div>
+    </div>
+
+    <div class="score-label">Natiijada Guud</div>
+    <div class="score-display" id="resultScore">0 / 0</div>
+
+    <div class="result-msg" id="resultMsg"></div>
+    <div class="stars" id="starsDisplay"></div>
+
+    <button class="btn-start" onclick="restartGame()">🔄 CYAAR MAR KALE</button>
+  </div>
+
+</div>
+
+<script>
+/* ============================================================
+   SU'AALAHA CUSUB — OPERATING SYSTEM
+   (20 su'aalood oo Part One + 10 su'aalood oo Part Two)
+   ============================================================ */
+const ALL_QUESTIONS = [
+
+  /* ===== PART ONE (1-20) ===== */
+  { q: "What is an Operating System?", options: ["A computer game", "System software", "A keyboard", "A printer"], answer: 1 },
+  { q: "Why is an Operating System important?", options: ["It plays music only", "It manages hardware and software resources", "It only prints documents", "It cleans the screen"], answer: 1 },
+  { q: "Name five hardware components of a computer.", options: ["CPU, RAM, Hard Disk, Keyboard, Monitor", "Word, Excel, Chrome, Paint, Notepad", "Facebook, YouTube, Google, Twitter, Instagram", "Folder, File, Icon, Cursor, Menu"], answer: 0 },
+  { q: "What is the function of the CPU?", options: ["It stores files permanently", "It processes instructions and performs calculations", "It displays images on the screen", "It prints documents"], answer: 1 },
+  { q: "What is RAM?", options: ["Read Access Memory", "Random Access Memory", "Run Access Machine", "Read Automatic Memory"], answer: 1 },
+  { q: "What does an Operating System manage?", options: ["Only the screen", "Hardware, software, memory, files and processes", "Only the keyboard", "Only the internet"], answer: 1 },
+  { q: "How does an OS communicate between users, applications, and hardware?", options: ["Through the internet only", "Through system calls and drivers", "Through the printer", "Through the speaker"], answer: 1 },
+  { q: "What happens when you open Microsoft Word?", options: ["The OS deletes RAM.", "The OS allocates memory to Word and loads it as a process.", "The OS turns off the computer.", "The OS removes Windows."], answer: 1 },
+  { q: "What is Process Management?", options: ["Managing the printer only", "Managing running programs and their execution", "Managing the keyboard", "Managing the monitor"], answer: 1 },
+  { q: "What is Memory Management?", options: ["Managing the mouse", "Managing RAM and allocating memory to programs", "Managing the internet", "Managing the printer"], answer: 1 },
+  { q: "What happens to RAM when you close a program?", options: ["RAM is permanently deleted", "The memory used by the program is freed", "The computer shuts down", "The hard disk is formatted"], answer: 1 },
+  { q: "What is File Management?", options: ["Managing files and folders (create, delete, move, copy)", "Managing the CPU", "Managing the keyboard", "Managing the printer"], answer: 0 },
+  { q: "Mention five things you can do with files.", options: ["Create, Open, Edit, Copy, Delete", "Cook, Wash, Sleep, Run, Jump", "Sing, Dance, Play, Walk, Talk", "Print, Scan, Fax, Copy, Email"], answer: 0 },
+  { q: "How does an Operating System protect user data?", options: ["By deleting all files", "Through passwords, permissions and user accounts", "By turning off the internet", "By removing the hard disk"], answer: 1 },
+  { q: "What is a user account?", options: ["A program for games", "A profile that lets a user access the computer with certain rights", "A type of printer", "A hardware component"], answer: 1 },
+  { q: "What are file permissions?", options: ["Rules that control who can read, write or execute a file", "Rules for printing money", "Rules for playing music", "Rules for turning off electricity"], answer: 0 },
+  { q: "What is Rufus?", options: ["A music player", "A software used to create bootable USB drives", "A text editor", "A web browser"], answer: 1 },
+  { q: "What is a bootable USB drive?", options: ["A USB that only stores photos", "A USB drive that can start (boot) a computer and install an OS", "A USB that plays music", "A USB that prints documents"], answer: 1 },
+  { q: "Why do we use Rufus?", options: ["To play music", "To create bootable USB drives for installing operating systems", "To type documents", "To browse the internet"], answer: 1 },
+  { q: "What is an ISO file?", options: ["A music file", "An image file of a CD/DVD/OS that can be used to install software", "A text file", "A picture file"], answer: 1 },
+
+  /* ===== PART TWO (Multiple Choice) ===== */
+  { q: "What is an Operating System?", options: ["A computer game", "System software", "A keyboard", "A printer"], answer: 1 },
+  { q: "Which of the following is computer hardware?", options: ["Microsoft Word", "Google Chrome", "Keyboard", "Windows"], answer: 2 },
+  { q: "What does RAM stand for?", options: ["Read Access Memory", "Random Access Memory", "Run Access Machine", "Read Automatic Memory"], answer: 1 },
+  { q: "Which component processes instructions?", options: ["CPU", "Mouse", "Monitor", "Printer"], answer: 0 },
+  { q: "What does the OS manage when programs are running?", options: ["Processes", "Chairs", "Tables", "Books"], answer: 0 },
+  { q: "What happens when you open Microsoft Word?", options: ["The OS deletes RAM.", "The OS allocates memory to Word.", "The OS turns off the computer.", "The OS removes Windows."], answer: 1 },
+  { q: "Which of the following is a file management task?", options: ["Creating files", "Washing a computer", "Printing money", "Turning off electricity"], answer: 0 },
+  { q: "Which of the following helps protect a computer?", options: ["Passwords", "Speakers", "Mouse", "Monitor"], answer: 0 },
+  { q: "What is Rufus used for?", options: ["Playing music", "Creating bootable USB drives", "Typing documents", "Browsing the internet"], answer: 1 },
+  { q: "What can Rufus help you install?", options: ["Windows or Linux", "Microsoft Word only", "Google Chrome only", "Music only"], answer: 0 }
+];
+
+/* ============ STATE ============ */
+let questions = [];
+let currentIndex = 0;
+let score = 0;
+let combo = 0;
+let userName = "";
+let selectedCount = 10;
+let locked = false;
+
+/* ============ CIRCLE SELECT ============ */
+document.querySelectorAll('.circle-card').forEach(card => {
+  card.addEventListener('click', () => {
+    document.querySelectorAll('.circle-card').forEach(c => c.classList.remove('active'));
+    card.classList.add('active');
+    selectedCount = parseInt(card.dataset.count);
+    playClick();
+  });
+});
+
+/* ============================================================
+   SHUFFLE
+   ============================================================ */
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function shuffleOptions(q) {
+  const correctText = q.options[q.answer];
+  const shuffled = shuffle(q.options);
+  const newAnswer = shuffled.indexOf(correctText);
+  return { q: q.q, options: shuffled, answer: newAnswer };
+}
+
+/* ============================================================
+   XASUUS — su'aasha hore dib looma soo celiyo
+   ============================================================ */
+const STORAGE_KEY = 'lastQuizQuestions_OS';
+
+function getLastQuestions() {
+  try {
+    return JSON.parse(sessionStorage.getItem(STORAGE_KEY) || '[]');
+  } catch { return []; }
+}
+
+function saveLastQuestions(arr) {
+  try {
+    sessionStorage.setItem(STORAGE_KEY, JSON.stringify(arr));
+  } catch {}
+}
+
+function pickFreshQuestions(count) {
+  const last = getLastQuestions();
+  const lastSet = new Set(last);
+
+  let pool = ALL_QUESTIONS.filter(q => !lastSet.has(q.q));
+
+  if (pool.length < count) {
+    pool = [...ALL_QUESTIONS];
+  }
+
+  const picked = shuffle(pool).slice(0, Math.min(count, pool.length));
+  saveLastQuestions(picked.map(q => q.q));
+  return picked.map(shuffleOptions);
+}
+
+/* ============ SOUNDS ============ */
+let audioCtx = null;
+function ctxInit() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+  return audioCtx;
+}
+
+function playClick() {
+  const ctx = ctxInit();
+  const o = ctx.createOscillator(), g = ctx.createGain();
+  o.type = 'square';
+  o.frequency.value = 900;
+  o.connect(g); g.connect(ctx.destination);
+  const t = ctx.currentTime;
+  g.gain.setValueAtTime(0.06, t);
+  g.gain.exponentialRampToValueAtTime(0.001, t + 0.06);
+  o.start(t); o.stop(t + 0.07);
+}
+
+function playSuccess() {
+  const ctx = ctxInit();
+  const notes = [523.25, 659.25, 783.99, 1046.5];
+  notes.forEach((f, i) => {
+    const o = ctx.createOscillator(), g = ctx.createGain();
+    o.type = 'triangle';
+    o.frequency.value = f;
+    o.connect(g); g.connect(ctx.destination);
+    const t = ctx.currentTime + i * 0.09;
+    g.gain.setValueAtTime(0, t);
+    g.gain.linearRampToValueAtTime(0.22, t + 0.02);
+    g.gain.exponentialRampToValueAtTime(0.001, t + 0.35);
+    o.start(t); o.stop(t + 0.4);
+  });
+}
+
+function playError() {
+  const ctx = ctxInit();
+  const o = ctx.createOscillator(), g = ctx.createGain();
+  o.type = 'sawtooth';
+  o.frequency.setValueAtTime(260, ctx.currentTime);
+  o.frequency.exponentialRampToValueAtTime(90, ctx.currentTime + 0.35);
+  o.connect(g); g.connect(ctx.destination);
+  const t = ctx.currentTime;
+  g.gain.setValueAtTime(0.18, t);
+  g.gain.exponentialRampToValueAtTime(0.001, t + 0.4);
+  o.start(t); o.stop(t + 0.42);
+}
+
+function playStart() {
+  const ctx = ctxInit();
+  [392, 523.25, 659.25, 783.99].forEach((f, i) => {
+    const o = ctx.createOscillator(), g = ctx.createGain();
+    o.type = 'square';
+    o.frequency.value = f;
+    o.connect(g); g.connect(ctx.destination);
+    const t = ctx.currentTime + i * 0.11;
+    g.gain.setValueAtTime(0, t);
+    g.gain.linearRampToValueAtTime(0.15, t + 0.02);
+    g.gain.exponentialRampToValueAtTime(0.001, t + 0.25);
+    o.start(t); o.stop(t + 0.28);
+  });
+}
+
+function playFanfare() {
+  const ctx = ctxInit();
+  const melody = [
+    [523.25, 0], [523.25, 0.15], [523.25, 0.3],
+    [659.25, 0.45], [783.99, 0.65], [1046.5, 0.85]
+  ];
+  melody.forEach(([f, d]) => {
+    const o = ctx.createOscillator(), g = ctx.createGain();
+    o.type = 'square';
+    o.frequency.value = f;
+    o.connect(g); g.connect(ctx.destination);
+    const t = ctx.currentTime + d;
+    g.gain.setValueAtTime(0, t);
+    g.gain.linearRampToValueAtTime(0.18, t + 0.02);
+    g.gain.exponentialRampToValueAtTime(0.001, t + 0.35);
+    o.start(t); o.stop(t + 0.4);
+  });
+}
+
+/* ============ BILOW ============ */
+function startGame() {
+  const nameVal = document.getElementById("nameInput").value.trim();
+  if (!nameVal) {
+    const inp = document.getElementById("nameInput");
+    inp.style.borderColor = '#ff2d55';
+    inp.style.boxShadow = '0 0 20px rgba(255,45,85,0.6)';
+    inp.focus();
+    playError();
+    setTimeout(() => {
+      inp.style.borderColor = '';
+      inp.style.boxShadow = '';
+    }, 1200);
+    return;
+  }
+
+  userName = nameVal;
+  questions = pickFreshQuestions(selectedCount);
+  currentIndex = 0;
+  score = 0;
+  combo = 0;
+  locked = false;
+
+  playStart();
+
+  document.getElementById("setupScreen").classList.add("hidden");
+  document.getElementById("quizScreen").classList.remove("hidden");
+
+  document.getElementById("playerName").textContent = userName;
+  document.getElementById("avatar").textContent = userName.charAt(0).toUpperCase();
+
+  renderQuestion();
+}
+
+/* ============ RENDER ============ */
+function renderQuestion() {
+  if (currentIndex >= questions.length) { showResults(); return; }
+  locked = false;
+  const q = questions[currentIndex];
+
+  document.getElementById("scoreVal").textContent = score;
+  document.getElementById("qCountVal").textContent = `${currentIndex + 1}/${questions.length}`;
+  document.getElementById("progressFill").style.width = `${(currentIndex / questions.length) * 100}%`;
+
+  const qbox = document.querySelector(".question-box");
+  qbox.style.animation = 'none';
+  void qbox.offsetWidth;
+  qbox.style.animation = 'qIn 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55)';
+  document.getElementById("questionText").textContent = q.q;
+
+  const container = document.getElementById("optionsContainer");
+  container.innerHTML = "";
+  q.options.forEach((opt, i) => {
+    const btn = document.createElement("button");
+    btn.className = "opt";
+    btn.innerHTML = `<span class="key-badge">${String.fromCharCode(65 + i)}</span><span>${opt}</span>`;
+    btn.onclick = () => selectAnswer(i, btn);
+    container.appendChild(btn);
+  });
+}
+
+/* ============ JAWAAB ============ */
+function selectAnswer(idx, btn) {
+  if (locked) return;
+  locked = true;
+  const q = questions[currentIndex];
+  const allBtns = document.querySelectorAll(".opt");
+
+  if (idx === q.answer) {
+    btn.classList.add("correct");
+    score++;
+    combo++;
+    playSuccess();
+    showFloat('+' + (10 + combo * 2), '#00ff88');
+    if (combo >= 3) {
+      setTimeout(() => showFloat('🔥 COMBO x' + combo, '#ffd60a'), 300);
+    }
+  } else {
+    btn.classList.add("wrong");
+    allBtns[q.answer].classList.add("correct");
+    combo = 0;
+    playError();
+    showFloat('❌', '#ff2d55');
+  }
+
+  document.getElementById("scoreVal").textContent = score;
+  allBtns.forEach(b => b.disabled = true);
+
+  setTimeout(() => {
+    currentIndex++;
+    renderQuestion();
+  }, 1500);
+}
+
+/* ============ FLOAT ============ */
+function showFloat(text, color) {
+  const el = document.createElement('div');
+  el.className = 'feedback-pop';
+  el.textContent = text;
+  el.style.color = color;
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 1100);
+}
+
+/* ============ NATIIJO ============ */
+function showResults() {
+  document.getElementById("quizScreen").classList.add("hidden");
+  document.getElementById("resultScreen").classList.remove("hidden");
+  document.getElementById("progressFill").style.width = '100%';
+
+  const total = questions.length;
+  const wrong = total - score;
+  const pct = Math.round((score / total) * 100);
+
+  document.getElementById("correctCount").textContent = score;
+  document.getElementById("wrongCount").textContent = wrong;
+  document.getElementById("resultScore").textContent = `${score} / ${total}`;
+
+  let badge = "🏆", title = "CYAAR DHAMMAAD", msg = "", stars = 0;
+  if (pct === 100) { badge = "👑"; title = "HEER SARE!"; msg = `Aad baad u fiican tahay, ${userName}! Dhammaan waad saxday!`; stars = 3; }
+  else if (pct >= 80) { badge = "🌟"; title = "AAD BAAD U FIICAN TAHAY!"; msg = `Hambalyo ${userName}! Waad ku guulaysatay!`; stars = 3; }
+  else if (pct >= 60) { badge = "🎯"; title = "WANAAGSAN!"; msg = `Waad dadaashay ${userName}! Sii wad!`; stars = 2; }
+  else if (pct >= 40) { badge = "💪"; title = "DADAAL BADAN!"; msg = `Ha quusan ${userName}! Mar kale isku day.`; stars = 1; }
+  else { badge = "📚"; title = "WAXBARO!"; msg = `Waxbarasho dheeri ah ayaa loo baahan yahay ${userName}.`; stars = 0; }
+
+  document.getElementById("resultBadge").textContent = badge;
+  document.getElementById("resultTitle").textContent = title;
+  document.getElementById("resultMsg").textContent = msg;
+
+  const starsEl = document.getElementById("starsDisplay");
+  starsEl.innerHTML = '';
+  for (let i = 0; i < 3; i++) {
+    const s = document.createElement('span');
+    s.textContent = i < stars ? '⭐' : '☆';
+    s.style.opacity = i < stars ? '1' : '0.3';
+    starsEl.appendChild(s);
+  }
+
+  playFanfare();
+}
+
+/* ============ DIB U BILOW ============ */
+function restartGame() {
+  document.getElementById("resultScreen").classList.add("hidden");
+  document.getElementById("setupScreen").classList.remove("hidden");
+  document.getElementById("nameInput").value = userName;
+  playClick();
+}
+
+/* ============ KEYBOARD ============ */
+document.addEventListener('keydown', (e) => {
+  if (document.getElementById("quizScreen").classList.contains("hidden")) {
+    if (e.key === 'Enter' && !document.getElementById("setupScreen").classList.contains("hidden")) {
+      startGame();
+    }
+    return;
+  }
+  const k = e.key.toUpperCase();
+  if (['A','B','C','D'].includes(k)) {
+    const btns = document.querySelectorAll('.opt');
+    const i = ['A','B','C','D'].indexOf(k);
+    if (btns[i] && !btns[i].disabled) btns[i].click();
+  }
+});
+</script>
+
+</body>
+</html>
